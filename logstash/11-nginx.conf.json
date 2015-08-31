@@ -1,0 +1,18 @@
+filter {
+  if [type] == "nginx-access" {
+    grok {
+      match => { "message" => "%{NGINXACCESS}" }
+    }
+    mutate {
+      convert => {
+        "bytes" => "integer"
+      }
+    }
+    useragent {
+      source => "agent"
+    }
+    date {
+      match => [ "timestamp", "dd/MMM/yyyy:HH:mm:ss Z" ]
+    }
+  }
+}

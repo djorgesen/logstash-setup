@@ -1,0 +1,12 @@
+input {
+  stdin { }
+}
+filter {
+  grok {
+    pattern_dir => "/opt/logstash/patterns"
+    match => { "message" => "%{HAPROXYHTTP}" }
+  }
+}
+output {
+  stdout { codec => rubydebug }
+}

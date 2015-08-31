@@ -1,0 +1,45 @@
+filter {
+  if [type] == "haproxy-http" {
+    grok {
+      match => { "message" => "%{HAPROXYHTTP}" }
+      remove_field => [
+        "syslog_server",
+        "syslog_timestamp",
+        "termination_state",
+        "program",
+        "pid",
+        "retries",
+        "srv_queue",
+        "srvconn",
+        "haproxy_hour",
+        "haproxy_milliseconds",
+        "haproxy_minute",
+        "haproxy_month",
+        "haproxy_monthday",
+        "haproxy_second",
+        "haproxy_time",
+        "haproxy_year",
+        "offset",
+        "client_port"
+      ]
+    }
+    mutate {
+      rename => {
+        "http_status_code" => "response"
+        "bytes_read" => "bytes"
+        "client_ip" => "clientip"
+        "http_request" => "request"
+        "http_verb" => "verb"
+        "http_version" => "httpversion"
+        "backend_name" => "site"
+      }
+      convert => {
+        "bytes" => "integer"
+        "time_duration" => "integer"
+      }
+    }
+    date {
+      match => [ "accept_date", "dd/MMM/yyyy:HH:mm:ss.SSS"]
+    }
+  }
+}

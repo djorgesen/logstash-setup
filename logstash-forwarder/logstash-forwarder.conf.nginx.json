@@ -1,0 +1,42 @@
+{
+  "network": {
+    "servers": [ "xxx.xxx.xxx.xxx:5000" ],
+    "timeout": 15,
+    "ssl ca": "/etc/pki/tls/certs/logstash-forwarder.crt"
+  },
+
+  "files": [
+    {
+      "paths": [ "/var/log/haproxy.log" ],
+      "fields": { "type": "haproxy-http" }
+    },
+    {
+      "paths": [
+        "/var/www/web/voapi/logs/access.log"
+      ],
+      "fields": {
+        "type": "nginx-access",
+        "site": "voapi"
+      }
+    },
+    {
+      "paths": [
+      "/var/www/web/django_cms_meetings/logs/access.log"
+      ],
+      "fields": {
+        "type": "nginx-access",
+        "site": "meeting_v1"
+      }
+    },
+    {
+      "paths": [
+        "/var/www/web/rest_api/logs/access.log"
+      ],
+      "fields": {
+        "type": "nginx-access",
+        "site": "rest_api"
+      }
+    }
+
+  ]
+}

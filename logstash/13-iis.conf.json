@@ -1,0 +1,38 @@
+filter {
+  if [type] == "iis" {
+    mutate {
+      remove_field => [
+        "date",
+        "SourceModuleType",
+        "serverip",
+        "substatus",
+        "sc_win32_status",
+        "port",
+        "cs_bytes",
+        "time"
+      ]
+      rename => {
+        "http_status_code" => "response"
+        "http_request" => "request"
+        "http_verb" => "verb"
+        "http_version" => "httpversion"
+        "http_user_agent" => "agent"
+        "hostname" => "host"
+        "sc_bytes" => "bytes"
+        "time_taken" => "time_duration"
+        "SourceModuleName" => "site"
+      }
+      convert => {
+        "response" => "string"
+      }
+    }
+
+    useragent {
+      source => "agent"
+    }
+    date {
+      match => [ "EventTime", "yyyy-MM-dd HH:mm:ss"]
+      timezone => "UTC"
+    }
+  }
+}
